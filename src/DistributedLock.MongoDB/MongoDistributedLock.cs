@@ -24,7 +24,8 @@ public sealed partial class MongoDistributedLock : IInternalDistributedLock<Mong
     private readonly MongoDistributedLockOptions _options;
     private readonly Lazy<IMongoCollection<MongoLockDocument>> _collection;
 
-    // Cached immutable BsonDocument sub-expressions to reduce GC pressure on hot paths
+    // Shared read-only BsonDocument sub-expressions cached to reduce GC pressure on hot paths.
+    // BsonDocument is mutable; these instances must never be modified after initialization.
     private static readonly BsonDocument ExpiredOrMissingExpr = new(
         "$lte",
         new BsonArray
@@ -71,14 +72,14 @@ public sealed partial class MongoDistributedLock : IInternalDistributedLock<Mong
 
     internal MongoDistributedLock(string key, IMongoDatabase database, string collectionName, MongoDistributedLockOptions options)
     {
-        var database1 = database ?? throw new ArgumentNullException(nameof(database));
+        var validatedDatabase = database ?? throw new ArgumentNullException(nameof(database));
         this._collectionName = collectionName ?? throw new ArgumentNullException(nameof(collectionName));
         // From what I can tell, modern (and all supported) MongoDB versions have no limits on index keys or
         // _id lengths other than the 16MB document limit. This is so high that providing "safe name" functionality as a fallback doesn't
         // see worth it.
         this.Key = key ?? throw new ArgumentNullException(nameof(key));
         this._options = options;
-        this._collection = new(() => database1.GetCollection<MongoLockDocument>(this._collectionName));
+        this._collection = new(() => validatedDatabase.GetCollection<MongoLockDocument>(this._collectionName));
         this._newExpiresAtExpr = new BsonDocument(
             "$dateAdd",
             new BsonDocument
@@ -214,10 +215,11 @@ public sealed partial class MongoDistributedLock : IInternalDistributedLock<Mong
                     await this._collection.DeleteOneAsync(this._ownerFilter, this.HandleLostToken).ConfigureAwait(false);
                 }
             }
-            catch (Exception)
+            catch (Exception ex) when (ex is MongoException or TimeoutException or OperationCanceledException)
             {
                 // Release failure is non-fatal: the TTL index will eventually clean up expired documents.
-                // Swallowing exceptions here prevents surprising callers during Dispose.
+                // Swallowing only expected network/write/cancellation failures prevents surprising callers
+                // during Dispose without hiding programming errors (e.g. ArgumentException).
             }
         }
 
