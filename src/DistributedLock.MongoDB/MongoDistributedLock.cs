@@ -212,7 +212,9 @@ public sealed partial class MongoDistributedLock : IInternalDistributedLock<Mong
                 }
                 else
                 {
-                    await this._collection.DeleteOneAsync(this._ownerFilter, this.HandleLostToken).ConfigureAwait(false);
+                    // Do not use HandleLostToken here: the monitor (and its CancellationTokenSource) is
+                    // already disposed before ReleaseLockAsync is called from DisposeAsync.
+                    await this._collection.DeleteOneAsync(this._ownerFilter, CancellationToken.None).ConfigureAwait(false);
                 }
             }
             catch (Exception ex) when (ex is MongoException or TimeoutException or OperationCanceledException)
