@@ -22,7 +22,7 @@ public sealed partial class MongoDistributedLock : IInternalDistributedLock<Mong
 
     private readonly string _collectionName;
     private readonly MongoDistributedLockOptions _options;
-    private readonly IMongoCollection<MongoLockDocument> _collection;
+    private readonly Lazy<IMongoCollection<MongoLockDocument>> _collection;
 
     // Cached immutable BsonDocument sub-expressions to reduce GC pressure on hot paths
     private static readonly BsonDocument ExpiredOrMissingExpr = new(
@@ -78,7 +78,7 @@ public sealed partial class MongoDistributedLock : IInternalDistributedLock<Mong
         // see worth it.
         this.Key = key ?? throw new ArgumentNullException(nameof(key));
         this._options = options;
-        this._collection = database1.GetCollection<MongoLockDocument>(this._collectionName);
+        this._collection = new(() => database1.GetCollection<MongoLockDocument>(this._collectionName));
         this._newExpiresAtExpr = new BsonDocument(
             "$dateAdd",
             new BsonDocument
@@ -104,12 +104,10 @@ public sealed partial class MongoDistributedLock : IInternalDistributedLock<Mong
         activity?.SetTag("lock.key", this.Key);
         activity?.SetTag("lock.collection", this._collectionName);
 
-        // Ensure TTL index exists (fire-and-forget, idempotent). Triggered on every attempt
-        // so that cleanup is set up even when all acquisition attempts fail.
-        _ = IndexInitializer.InitializeTtlIndex(this._collection);
-
         // Use a unique token per acquisition attempt (like Redis' value token)
         var lockId = Guid.NewGuid().ToString("N");
+
+        var collection = this._collection.Value;
 
         // We avoid exception-driven contention (DuplicateKey) by using a single upsert on {_id == Key}
         // and an update pipeline that only overwrites fields when the existing lock is expired.
@@ -123,15 +121,18 @@ public sealed partial class MongoDistributedLock : IInternalDistributedLock<Mong
         };
 
         var result = SyncViaAsync.IsSynchronous
-            ? this._collection.FindOneAndUpdate(filter, update, options, cancellationToken)
-            : await this._collection.FindOneAndUpdateAsync(filter, update, options, cancellationToken).ConfigureAwait(false);
+            ? collection.FindOneAndUpdate(filter, update, options, cancellationToken)
+            : await collection.FindOneAndUpdateAsync(filter, update, options, cancellationToken).ConfigureAwait(false);
 
         // Verify we actually got the lock
         if (result?.LockId == lockId)
         {
+            // Fire-and-forget TTL index creation only on successful acquire to avoid
+            // unnecessary DB calls when the lock is contended.
+            _ = IndexInitializer.InitializeTtlIndex(collection);
             activity?.SetTag("lock.acquired", true);
             activity?.SetTag("lock.fencing_token", result.FencingToken);
-            return new(new(this, lockId, this._collection), result.FencingToken);
+            return new(new(this, lockId, collection), result.FencingToken);
         }
         activity?.SetTag("lock.acquired", false);
         return null;
