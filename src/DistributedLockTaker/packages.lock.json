@@ -204,8 +204,8 @@
       },
       "MongoDB.Bson": {
         "type": "Transitive",
-        "resolved": "3.5.2",
-        "contentHash": "aTlbKclBjXi4j3AkrHiaeuKCvdoGA029VbvXJUmmsCXDz+DEfBFq6n9uOvXJu2YXcJiW9Vay1ZctY5Iu0JRXdw==",
+        "resolved": "3.7.1",
+        "contentHash": "ZhCFCN64iZNaV6TDVNpjQ6p8M8tQvLda6ABbfrqd6XEZ3qn0pwwDJi6+DZ3xySadUwGzKR0CV3IzmHEWe/wI4Q==",
         "dependencies": {
           "System.Memory": "4.5.5",
           "System.Runtime.CompilerServices.Unsafe": "5.0.0"
@@ -499,10 +499,10 @@
           "DistributedLock.FileSystem": "[1.0.3, )",
           "DistributedLock.MongoDB": "[1.0.0, )",
           "DistributedLock.MySql": "[1.0.2, )",
-          "DistributedLock.Oracle": "[1.0.4, )",
+          "DistributedLock.Oracle": "[1.0.5, )",
           "DistributedLock.Postgres": "[1.3.0, )",
           "DistributedLock.Redis": "[1.1.1, )",
-          "DistributedLock.SqlServer": "[1.0.6, )",
+          "DistributedLock.SqlServer": "[1.0.7, )",
           "DistributedLock.WaitHandles": "[1.0.1, )",
           "DistributedLock.ZooKeeper": "[1.0.0, )"
         }
@@ -531,8 +531,8 @@
         "type": "Project",
         "dependencies": {
           "DistributedLock.Core": "[1.0.9, )",
-          "MongoDB.Driver": "[3.5.2, )",
-          "System.Diagnostics.DiagnosticSource": "[10.0.1, )"
+          "MongoDB.Driver": "[3.7.1, )",
+          "System.Diagnostics.DiagnosticSource": "[10.0.5, )"
         }
       },
       "distributedlock.mysql": {
@@ -618,16 +618,17 @@
       },
       "MongoDB.Driver": {
         "type": "CentralTransitive",
-        "requested": "[3.5.2, )",
-        "resolved": "3.5.2",
-        "contentHash": "Z1EW+CI18wOQqyAnhZkQXvUVXycrHoOb8/dlJzPHKFfNp9XPB6sEJJR67GUVYyB03B5xzt1RlwSyLXAx9B5+yQ==",
+        "requested": "[3.7.1, )",
+        "resolved": "3.7.1",
+        "contentHash": "p1Od3F5/lQUiYKF+o7+ommuVwK/71gbw5tu28toO1mID91cMPmdCL6EhX0K0+HwpytmMSfciI8j4688K//QcQA==",
         "dependencies": {
           "DnsClient": "1.6.1",
           "Microsoft.Extensions.Logging.Abstractions": "2.0.0",
-          "MongoDB.Bson": "3.5.2",
+          "MongoDB.Bson": "3.7.1",
           "SharpCompress": "0.30.1",
           "Snappier": "1.0.0",
           "System.Buffers": "4.5.1",
+          "System.Diagnostics.DiagnosticSource": "6.0.1",
           "System.Net.Http": "4.3.4",
           "System.Runtime.InteropServices.RuntimeInformation": "4.3.0",
           "ZstdSharp.Port": "0.7.3"
@@ -686,9 +687,9 @@
       },
       "System.Diagnostics.DiagnosticSource": {
         "type": "CentralTransitive",
-        "requested": "[10.0.1, )",
-        "resolved": "10.0.1",
-        "contentHash": "wVYO4/71Pk177uQ3TG8ZQFS3Pnmr98cF9pYxnpuIb/bMnbEWsdZZoLU/euv29mfSi2/Iuypj0TRUchPk7aqBGg==",
+        "requested": "[10.0.5, )",
+        "resolved": "10.0.5",
+        "contentHash": "CCbzHQ26L3jskdwHh+4bxxW84lUMIrAAmeSlpO69AlrQV0DKbj1/I+feLaLSuZeqXPr9UlSy0OcgZoXOk2a6/g==",
         "dependencies": {
           "System.Memory": "4.6.3",
           "System.Runtime.CompilerServices.Unsafe": "6.1.2"
@@ -701,7 +702,7 @@
         "contentHash": "YECtByVSH7TRjQKplwOWiKyanCqYE5eEkGk5YtHJgsnbZ6+p1o0Gvs5RIsZLotiAVa6Niez1BJyKY/RDY/L6zg=="
       }
     },
-    ".NETFramework,Version=v4.7.2/win7-x86": {
+    ".NETFramework,Version=v4.7.2/win-x86": {
       "Microsoft.Win32.Registry": {
         "type": "Transitive",
         "resolved": "5.0.0",
@@ -816,9 +817,9 @@
     "net8.0": {
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
-        "requested": "[8.0.4, )",
-        "resolved": "8.0.4",
-        "contentHash": "PZb5nfQ+U19nhnmnR9T1jw+LTmozhuG2eeuzuW5A7DqxD/UXW2ucjmNJqnqOuh8rdPzM3MQXoF8AfFCedJdCUw=="
+        "requested": "[8.0.24, )",
+        "resolved": "8.0.24",
+        "contentHash": "1gnadp//+DoGJvV4AFdzPqYPxkypaWYjYMCr7KAacV0iadsHz1nU+rrkoxBCna4FCmeKH49CisEwa7g94/MbEg=="
       },
       "Azure.Core": {
         "type": "Transitive",
@@ -1000,8 +1001,8 @@
       },
       "MongoDB.Bson": {
         "type": "Transitive",
-        "resolved": "3.5.2",
-        "contentHash": "aTlbKclBjXi4j3AkrHiaeuKCvdoGA029VbvXJUmmsCXDz+DEfBFq6n9uOvXJu2YXcJiW9Vay1ZctY5Iu0JRXdw==",
+        "resolved": "3.7.1",
+        "contentHash": "ZhCFCN64iZNaV6TDVNpjQ6p8M8tQvLda6ABbfrqd6XEZ3qn0pwwDJi6+DZ3xySadUwGzKR0CV3IzmHEWe/wI4Q==",
         "dependencies": {
           "System.Memory": "4.5.5",
           "System.Runtime.CompilerServices.Unsafe": "5.0.0"
@@ -1167,10 +1168,10 @@
           "DistributedLock.FileSystem": "[1.0.3, )",
           "DistributedLock.MongoDB": "[1.0.0, )",
           "DistributedLock.MySql": "[1.0.2, )",
-          "DistributedLock.Oracle": "[1.0.4, )",
+          "DistributedLock.Oracle": "[1.0.5, )",
           "DistributedLock.Postgres": "[1.3.0, )",
           "DistributedLock.Redis": "[1.1.1, )",
-          "DistributedLock.SqlServer": "[1.0.6, )",
+          "DistributedLock.SqlServer": "[1.0.7, )",
           "DistributedLock.WaitHandles": "[1.0.1, )",
           "DistributedLock.ZooKeeper": "[1.0.0, )"
         }
@@ -1195,7 +1196,7 @@
         "type": "Project",
         "dependencies": {
           "DistributedLock.Core": "[1.0.9, )",
-          "MongoDB.Driver": "[3.5.2, )"
+          "MongoDB.Driver": "[3.7.1, )"
         }
       },
       "distributedlock.mysql": {
@@ -1279,13 +1280,13 @@
       },
       "MongoDB.Driver": {
         "type": "CentralTransitive",
-        "requested": "[3.5.2, )",
-        "resolved": "3.5.2",
-        "contentHash": "Z1EW+CI18wOQqyAnhZkQXvUVXycrHoOb8/dlJzPHKFfNp9XPB6sEJJR67GUVYyB03B5xzt1RlwSyLXAx9B5+yQ==",
+        "requested": "[3.7.1, )",
+        "resolved": "3.7.1",
+        "contentHash": "p1Od3F5/lQUiYKF+o7+ommuVwK/71gbw5tu28toO1mID91cMPmdCL6EhX0K0+HwpytmMSfciI8j4688K//QcQA==",
         "dependencies": {
           "DnsClient": "1.6.1",
           "Microsoft.Extensions.Logging.Abstractions": "2.0.0",
-          "MongoDB.Bson": "3.5.2",
+          "MongoDB.Bson": "3.7.1",
           "SharpCompress": "0.30.1",
           "Snappier": "1.0.0",
           "System.Buffers": "4.5.1",
@@ -1333,7 +1334,7 @@
         "contentHash": "YECtByVSH7TRjQKplwOWiKyanCqYE5eEkGk5YtHJgsnbZ6+p1o0Gvs5RIsZLotiAVa6Niez1BJyKY/RDY/L6zg=="
       }
     },
-    "net8.0/win7-x86": {
+    "net8.0/win-x86": {
       "Microsoft.Data.SqlClient.SNI.runtime": {
         "type": "Transitive",
         "resolved": "6.0.2",

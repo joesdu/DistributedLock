@@ -1,8 +1,9 @@
-﻿using MongoDB.Driver;
+using MongoDB.Driver;
 using System.Collections.Concurrent;
 
 namespace Medallion.Threading.MongoDB;
 
+// ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 internal class MongoIndexInitializer
 {
     private const string IndexName = "expiresAt_ttl";
@@ -40,7 +41,7 @@ internal class MongoIndexInitializer
 
     private async Task<bool?> CreateIndexIfNotExistsWrapperAsync(IMongoCollection<MongoLockDocument> collection)
     {
-        if (await this.CreateIndexIfNotExistsAsync(collection).ConfigureAwait(false) is { } result)
+        if (await CreateIndexIfNotExistsAsync(collection).ConfigureAwait(false) is { } result)
         {
             return result;
         }
@@ -54,7 +55,7 @@ internal class MongoIndexInitializer
     // exposed for mocking
     internal virtual Task DelayBeforeRetry() => Task.Delay(TimeSpan.FromMinutes(1));
 
-    private async Task<bool?> CreateIndexIfNotExistsAsync(IMongoCollection<MongoLockDocument> collection)
+    private static async Task<bool?> CreateIndexIfNotExistsAsync(IMongoCollection<MongoLockDocument> collection)
     {
         using var activity = MongoDistributedLock.ActivitySource.StartActivity(nameof(MongoIndexInitializer) + ".CreateIndexIfNotExists");
         activity?.AddTag("collection", collection.CollectionNamespace.FullName);
@@ -122,12 +123,13 @@ internal class MongoIndexInitializer
                 // Check if it is a TTL index on column "expiresAt"
 
                 // TTL indexes contain the "expireAfterSeconds" field in their options
-                if (index.Contains("expireAfterSeconds"))
+                if (!index.Contains("expireAfterSeconds"))
                 {
-                    var keyElement = index["key"].AsBsonDocument;
-                    // Check if the first key in the index is "foo"
-                    if (keyElement.Contains("expiresAt")) { return true; }
+                    continue;
                 }
+                var keyElement = index["key"].AsBsonDocument;
+                // Check if the first key in the index is "expiresAt"
+                if (keyElement.Contains("expiresAt")) { return true; }
             }
         }
 
