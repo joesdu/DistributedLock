@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 
 namespace Medallion.Threading.MongoDB;
 
-// ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 internal class MongoIndexInitializer
 {
     private const string IndexName = "expiresAt_ttl";
@@ -121,7 +120,6 @@ internal class MongoIndexInitializer
                 if (index["name"].AsString == IndexName) { return true; }
 
                 // TTL indexes contain the "expireAfterSeconds" field in their options
-                // ReSharper disable once InvertIf
                 if (index.Contains("expireAfterSeconds"))
                 {
                     var keyElement = index["key"].AsBsonDocument;
