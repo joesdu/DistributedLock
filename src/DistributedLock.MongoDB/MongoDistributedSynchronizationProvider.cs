@@ -9,7 +9,7 @@ public sealed class MongoDistributedSynchronizationProvider : IDistributedLockPr
 {
     private readonly string _collectionName;
     private readonly IMongoDatabase _database;
-    private readonly MongoDistributedLockOptions _options;
+    private readonly Action<MongoDistributedSynchronizationOptionsBuilder>? _options;
 
     /// <summary>
     /// Constructs a <see cref="MongoDistributedSynchronizationProvider" /> that connects to the provided <paramref name="database" />
@@ -26,7 +26,7 @@ public sealed class MongoDistributedSynchronizationProvider : IDistributedLockPr
     {
         this._database = database ?? throw new ArgumentNullException(nameof(database));
         this._collectionName = collectionName ?? throw new ArgumentNullException(nameof(collectionName));
-        this._options = MongoDistributedSynchronizationOptionsBuilder.GetOptions(options);
+        this._options = options;
     }
 
     /// <summary>

@@ -120,16 +120,14 @@ internal class MongoIndexInitializer
             {
                 if (index["name"].AsString == IndexName) { return true; }
 
-                // Check if it is a TTL index on column "expiresAt"
-
                 // TTL indexes contain the "expireAfterSeconds" field in their options
-                if (!index.Contains("expireAfterSeconds"))
+                // ReSharper disable once InvertIf
+                if (index.Contains("expireAfterSeconds"))
                 {
-                    continue;
+                    var keyElement = index["key"].AsBsonDocument;
+                    // Check if the first key in the index is "expiresAt"
+                    if (keyElement.Contains("expiresAt")) { return true; }
                 }
-                var keyElement = index["key"].AsBsonDocument;
-                // Check if the first key in the index is "expiresAt"
-                if (keyElement.Contains("expiresAt")) { return true; }
             }
         }
 
